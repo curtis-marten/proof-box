@@ -1,0 +1,13 @@
+# ProofBox Configuration
+
+debug_mode: true
+
+call_rate_seconds: 1
+
+# Temperature settings (Fahrenheit)
+
+alarm_low_temp: 32.0
+alarm_high_temp: 95.0
+
+min_temp: 65.0
+max_temp: 85.0
