@@ -1,5 +1,7 @@
 import yaml
 import time
+from gpiozero import LED
+
 
 
 def read_temp(id):
@@ -35,16 +37,23 @@ def load_config():
 #        temp = yaml.load(ymlfile, Loader=yaml.FullLoader)
 #    return temp["temp"]
 
+relay = LED(17)
 
 def heat_on():
+    # relay logic is reversed (active low)
+    relay.off()
     print("Heat On!")
 
 
 def heat_off():
+    # relay logic is reversed (active low)
+    relay.on()
     print("Heat Off!")
 
 
 def main_loop(cfg):
+
+    relay.on()
 
     heat = False
 
