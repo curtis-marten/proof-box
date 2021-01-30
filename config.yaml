@@ -4,6 +4,8 @@ debug_mode: true
 
 call_rate_seconds: 1
 
+temp_sense_id: '28-051686ec5dff'
+
 # Temperature settings (Fahrenheit)
 
 alarm_low_temp: 32.0

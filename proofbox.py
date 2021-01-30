@@ -2,6 +2,27 @@ import yaml
 import time
 
 
+def read_temp(id):
+    try:
+        f = open('/sys/bus/w1/devices/' + id + '/w1_slave')
+        line = f.readline()
+        crc = line.rsplit(' ', 1)
+        crc = crc[1].replace('\n', '')
+        if crc=='YES':
+            line = f.readline()
+            temp = line.rsplit('t=',1)
+        else:
+            temp = 999999
+        f.close()
+        
+        tempF = (int(temp[1]) / 1000 * 1.8) + 32
+        return tempF
+
+    except:
+        return 999999
+
+
+
 def load_config():
     with open("config.yaml", "r") as ymlfile:
         cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
@@ -9,10 +30,10 @@ def load_config():
     return cfg
 
 
-def read_temp():
-    with open("temp.yaml", "r") as ymlfile:
-        temp = yaml.load(ymlfile, Loader=yaml.FullLoader)
-    return temp["temp"]
+#def read_temp():
+#    with open("temp.yaml", "r") as ymlfile:
+#        temp = yaml.load(ymlfile, Loader=yaml.FullLoader)
+#    return temp["temp"]
 
 
 def heat_on():
@@ -29,14 +50,16 @@ def main_loop(cfg):
 
     min_temp = cfg["min_temp"]
     max_temp = cfg["max_temp"]
+    temp_sense_id = cfg["temp_sense_id"]
 
-    current_temp = read_temp()
+    current_temp = read_temp(temp_sense_id)
     session_max_temp = current_temp
     session_min_temp = current_temp
 
     while(True):
         time.sleep(1)
-        current_temp = read_temp()
+        current_temp = read_temp(temp_sense_id)
+        print(current_temp)    
         session_max_temp = max(current_temp, session_max_temp)
         session_min_temp = min(current_temp, session_min_temp)
 
